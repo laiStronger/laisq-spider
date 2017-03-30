@@ -18,6 +18,8 @@ import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.vo.SpiderProductDTO;
@@ -96,15 +98,18 @@ public class SeleniumUtils {
 			webDriver.get(url);
 
 			if (url.contains("tmall")) { // 天猫：滑动到最下面是id为footer的元素；淘宝：滑动到最下面是class为footer的元素
+				WebDriverWait wait = new WebDriverWait(webDriver, 60);// 1 minute
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("footer")));
+
 				WebElement webElement = webDriver.findElement(By.id("footer"));
+
 				Thread.sleep(5000);
 				logger.info("webElement:" + webElement);
 
 				new Actions(webDriver).moveToElement(webElement).perform();
 			} else {
 				new Actions(webDriver).moveToElement(
-						webDriver.findElement(By.className("tb-footer")))
-						.perform();
+						webDriver.findElement(By.className("tb-footer"))).perform();
 
 			}
 
